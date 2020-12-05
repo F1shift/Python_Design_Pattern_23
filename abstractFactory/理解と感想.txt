@@ -1,0 +1,13 @@
+【長所】：
+Pizza生産のケースでは、
+Abstract Factoryパターンを用いて、新しいPizzaと作ろうとする時、
+新しいFactroyやMaterial(新規食材を使う場合)を作成した上て、
+ちょっとだけPizzaStoreで呼び出しの行を追加すればいい。
+既存のFactroyやPizzaクラスに修正を加えることなく、
+この部分はオープン・クローズ原則に満たしています。
+
+【改善できるポイント】：
+新しいPizzaと作ろうとする時PizzaStoreを修正しなければなりません。
+改善策として、使えるPizzaFactoryを外部データベースに登録し、
+PizzaStoreクラスでデータベースからPizzaFactoryを読み込む形にすれば、
+PizzaStoreもオープン・クローズ原則に満たせるのではないかと思います。

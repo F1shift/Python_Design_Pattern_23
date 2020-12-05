@@ -1,0 +1,80 @@
+Bridgeパターンは機能の実装をクラスから独立し、
+各機能を自由に組み合わせるようにすることによって、
+機能拡張によるサブクラス数の増加を解消できる。
+
+
+【Bridgeパターン使用しない場合】
+
+    interfaceA       interfaceB
+    ----------       ----------
+    +methodA()       +methodB()
+        ｜               ｜
+        ｜ーーーーーーーー ┛
+        ｜
+        ▽
+    AbstractClass
+    -------------
+        ｜
+        ｜
+         ┗ー▷ Class1
+        ｜  　-------------
+        ｜  　-------------
+        ｜    +methodA() 〇---impelement_A1
+        ｜    +methodB() 〇---impelement_B1
+        ｜
+        ｜
+         ┗ー▷ Class2
+        ｜    -------------
+        ｜    -------------
+        ｜    +methodA() 〇---impelement_A2
+        ｜    +methodB() 〇---impelement_B1
+        ｜
+        ｜
+         ┗ー▷ Class3
+        ｜    -------------
+        ｜    -------------
+        ｜    +methodA() 〇---impelement_A1
+        ｜    +methodB() 〇---impelement_B2
+        ｜
+        ｜
+         ┗ー▷ Class4
+            　-------------
+            　-------------
+              +methodA() 〇---impelement_A2
+              +methodB() 〇---impelement_B2
+
+
+【Bridgeパターン使用】
+
+    interfaceA 
+    ---------- ◇ーーーーーーーーーーーーーーーーーーーーー-┓
+    +methodA()                                          ｜
+        ｜                                              ｜
+        ｜                                              ｜
+         ┗ー▷ ImplementClassA1                          ｜
+        ｜    ---------------                           ｜
+        ｜    ---------------                           ｜    Class1
+        ｜    +methodA() 〇-----impelement_A1           ｜ーー ------------------------
+        ｜                                              ｜    +implement_A :interfaceA
+        ｜                                              ｜    +implement_B :interfaceB
+         ┗ー▷ ImplementClassA2                          ｜     ------------------------
+              ---------------                           ｜　　+someMethod()  〇------------ implement_A.methodA()
+              ---------------                           ｜                                  implement_B.methodB()
+              +methodA() 〇-----impelement_A2           ｜
+                                                        ｜
+                                                        ｜
+    interfaceB                                          ｜
+    ---------- ◇ーーーーーーーーーーーーーーーーーーーーー-┛
+    +methodB()
+        ｜
+        ｜
+         ┗ー▷ ImplementClassB1
+        ｜    ---------------
+        ｜    ---------------
+        ｜    +methodA() 〇-----impelement_B1
+        ｜
+        ｜
+         ┗ー▷ ImplementClassB2
+              ---------------
+              ---------------
+              +methodA() 〇-----impelement_B2
