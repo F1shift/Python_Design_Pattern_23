@@ -4,16 +4,18 @@ from pathlib import Path
 sys.path.append(Path(__file__).parents[1].__str__())
 import inspect
 from utils.register import check_has_decorator
-from abc import ABCMeta, ABC
-from typing import Any, Tuple, Dict, Union
+from abc import ABCMeta
+from typing import Callable, Any, Tuple, Dict, Type, cast
 
+AnyMethod = Callable[..., Any]
+Decorator = Callable[[AnyMethod], AnyMethod]
 
 class OverrideException(Exception):
     """overrideチェックに失敗すろ時のエラー。"""
     pass
 
 
-def override(method):
+def override(method: AnyMethod) -> AnyMethod:
     """utils.registerと併用して、タグとして使います。
 
 from utils.override import override
@@ -25,12 +27,12 @@ def method():
 
 
 class ABCDMeta(ABCMeta):
-    def __init__(self, name, bases, dic) -> None:
+    def __init__(self, name: str, bases: Tuple[type, ...], dic: Dict[str, Any]) -> None:
         super().__init__(name, bases, dic)
         ABCDMeta.__check_override__(self)
 
     @staticmethod
-    def __check_override__(class_to_check: type):
+    def __check_override__(class_to_check: Type["ABCDMeta"]):
         """overrideするメソッドが存在しているかをチェックする。
 
     from utils.register import register
@@ -55,7 +57,7 @@ class ABCDMeta(ABCMeta):
         for method in override_methods:
             exist = False
             for base in class_to_check.__bases__:
-                if method[0] in dir(base):
+                if method[0] in dir(cast(type, base)):
                     exist = True
                     break
             if not exist:

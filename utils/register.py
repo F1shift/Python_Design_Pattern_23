@@ -1,9 +1,9 @@
-from typing import Callable
+from typing import Callable, Any, Optional
 
+AnyMethod = Callable[..., Any]
+Decorator = Callable[[AnyMethod], AnyMethod]
 
-from typing import overload, Callable, Any
-
-def register(*decorators, target: Callable[..., Any] = None):
+def register(*decorators: Decorator, target: Optional[AnyMethod] = None):
     """デコレーターを適用する同時にmethod._decoratorsリストに追加する。
     また、method._decorator_namesリストにデコレーター名を追加する。
     
@@ -14,15 +14,15 @@ def register(*decorators, target: Callable[..., Any] = None):
     :param decorators: デコレーター
     :return:
     """
-    def wrapper(method):
+    def wrapper(method: AnyMethod):
         for deco in decorators:
             method = deco(method)
-        method._decorators = decorators
-        method._decorator_names = tuple(map(lambda f: f.__name__, decorators))
+        setattr(method, "_decorators", decorators)
+        setattr(method, "_decorator_names", tuple(map(lambda f: f.__name__, decorators)))
         return method
     return wrapper
 
-def check_has_decorators(method):
+def check_has_decorators(method: AnyMethod):
     """methodに_decoratorsを持っているのかをチェックする。
 
     :param method:
@@ -34,7 +34,7 @@ def check_has_decorators(method):
         return False
 
 
-def get_decorators(method):
+def get_decorators(method: AnyMethod):
     """_decoratorsを返す。存在しないば場合はNoneを返す。
 
     :param method:
@@ -43,7 +43,7 @@ def get_decorators(method):
     return getattr(method, "_decorators", None)
 
 
-def get_decorator_names(method):
+def get_decorator_names(method: AnyMethod):
     """_decorator_namesを返す。存在しないば場合はNoneを返す。
 
     :param method:
@@ -52,7 +52,7 @@ def get_decorator_names(method):
     return getattr(method, "_decorator_names", None)
 
 
-def check_has_decorator(method, decorator_name):
+def check_has_decorator(method: AnyMethod, decorator_name: str):
     decorators_names = get_decorator_names(method)
     if decorators_names is None:
         return False
