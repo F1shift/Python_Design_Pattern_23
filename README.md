@@ -1,0 +1,2 @@
+# Python_Design_Pattern_23
+ Pythonでのデザインパターンサンプル
