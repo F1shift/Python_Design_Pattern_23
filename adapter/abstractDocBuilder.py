@@ -4,7 +4,7 @@ from pathlib import Path
 sys.path.append(Path(__file__).parents[1].__str__())
 from abc import abstractmethod
 from utils.abcd import ABCD
-from utils.register import registToMethod
+from utils.register import regist
 
 
 class AbstractDocBuilder(ABCD):

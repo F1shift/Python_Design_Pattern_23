@@ -1,5 +1,5 @@
 from inspect import isclass, isfunction
-from typing import Callable, Any, Dict, Union, Type, cast, TypeVar, Tuple
+from typing import Callable, Any, Dict, Union, Type, cast, Tuple
 
 __AnyMethod = Callable[..., Any]
 __FunctionDecorator = Callable[[__AnyMethod], __AnyMethod]
@@ -7,47 +7,25 @@ __FunctionOrPropertyDecorator = Union[Callable[[__AnyMethod], __AnyMethod], Type
 __AnyMethodOrProperty = Union[__AnyMethod, property]
 __registPool: Dict[__AnyMethodOrProperty, Tuple[__FunctionOrPropertyDecorator]] = {}
 
-def registToMethod(*decorators: __FunctionDecorator) -> __FunctionDecorator:
-    """デコレーターを適用する同時にmethod._decoratorsリストに追加する。
-    また、method._decorator_namesリストにデコレーター名を追加する。
+def regist(*decorators: __FunctionOrPropertyDecorator) :
+    """デコレーターを適用する同時に__registPoolにデコレーターのタプルを追加する。
     
-    @registToMethod(decorator1, decorator2, ...)
-    def method(...) -> ...:
+    @regist(property, decorator1, decorator2, ...)
+    def some_property(self) -> ...:
         ...
     
-    :param decorators: デコレーター
-    :return:
-    """
-    def wrapper(method: __AnyMethod) -> __AnyMethod:
-        for deco in decorators:
-            method = deco(method)
-        __registPool[method] = decorators
-        return method
-    return wrapper
-
-__propertyType__ = TypeVar("__propertyType__", bound=property)
-        
-
-def registToProperty(*decorators: __FunctionOrPropertyDecorator) :
-    """デコレーターを適用する同時にmethod._decoratorsリストに追加する。
-    また、method._decorator_namesリストにデコレーター名を追加する。
-    
-    @registToMethod(decorator1, decorator2, ...)
-    def method(...) -> ...:
-        ...
-    
-    :param decorators: デコレーター
+    :param decorators: デコレーターメソッドまたはクラス
     :return:
     """
     functionDecorators = [ cast(__FunctionDecorator, deco) for deco in decorators if isfunction(deco)]
     propertyDecorators = [ cast(Type, deco) for deco in decorators if isclass(deco)]
-    def wrapper(method: __AnyMethod) -> property:
+    def wrapper(method: __AnyMethod) -> Any:
         for deco in functionDecorators:
             method = deco(method)
         for deco in propertyDecorators:
             method = deco(method)
         __registPool[method] = decorators
-        return cast(property, method)
+        return method
     return wrapper
 
 
@@ -57,7 +35,7 @@ def check_has_decorators(key: Any) -> bool:
     :param method:
     :return:
     """
-    if not hasattr(key, "__hash__"):
+    if not hasattr(key, "__hash__") or not key.__hash__:
         return False
     return key in __registPool
 

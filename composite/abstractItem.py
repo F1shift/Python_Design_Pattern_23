@@ -4,7 +4,7 @@ from pathlib import Path
 sys.path.append(Path(__file__).parents[1].__str__())
 from abc import abstractmethod, abstractproperty
 from utils.abcd import ABCD
-from typing import Iterator
+from typing import Any, IO, Iterator
 
 class AbstractItem(ABCD):
     def __init__(self, name: str) -> None:
@@ -24,7 +24,7 @@ class AbstractItem(ABCD):
         ...
     
     @abstractproperty
-    def price(self) -> str:
+    def price(self) -> float:
         ...
     
     @abstractmethod
@@ -32,5 +32,5 @@ class AbstractItem(ABCD):
         ...
 
     @abstractmethod
-    def print(self) -> None:
+    def print(self, indent: str="    ", file: IO[Any]=sys.stdout) -> None:
         ...

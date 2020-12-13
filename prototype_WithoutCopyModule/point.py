@@ -5,7 +5,7 @@ from pathlib import Path
 sys.path.append(Path(__file__).parents[1].__str__())
 from prototype_WithoutCopyModule.cloneable import Cloneable
 from utils.abcd import override
-from utils.register import registToMethod
+from utils.register import regist
 
 class Point(Cloneable):
     def __init__(self, x: float, y: float) -> None:
@@ -34,11 +34,11 @@ class Point(Cloneable):
     def Y(self, value: float) -> None:
         self.__Y = value
         
-    @registToMethod(override)
+    @regist(override)
     def clone(self) -> "Point":
         p = Point(self.X, self.Y)
         return p 
 
-    @registToMethod(override)
+    @regist(override)
     def __str__(self) -> str:
         return f"{{id:{ id(self)}, X:{self.X}, Y:{self.Y}, __X:{self.__X}, __Y:{self.__Y}}}"

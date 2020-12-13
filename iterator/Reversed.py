@@ -3,7 +3,7 @@ from pathlib import Path
 # 親ディレクトリをsys.pathに追加。upto (int): 遡る階層。
 sys.path.append(Path(__file__).parents[1].__str__())
 from utils.abcd import override
-from utils.register import registToMethod
+from utils.register import regist
 from iterator.Iterator import Iterator
 
 
@@ -12,11 +12,11 @@ class Reversed(Iterator):
         self.items = items
         self.index = len(items)
 
-    @registToMethod(override)
+    @regist(override)
     def __iter__(self):
         return self
 
-    @registToMethod(override)
+    @regist(override)
     def __next__(self):
         if self.index > 0:
             self.index -= 1

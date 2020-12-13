@@ -19,7 +19,7 @@ def override(method: AnyMethod) -> AnyMethod:
     """utils.registerと併用して、タグとして使います。
 
 from utils.override import override
-@registToMethod(override)
+@regist(override)
 def method():
     ...
 """
@@ -35,7 +35,7 @@ class ABCDMeta(ABCMeta):
     def __check_override__(class_to_check: Type["ABCDMeta"]):
         """overrideするメソッドが存在しているかをチェックする。
 
-    from utils.register import registToMethod
+    from utils.register import regist
     from utils.override import override, check_override
 
     class A
@@ -43,11 +43,11 @@ class ABCDMeta(ABCMeta):
             ...
 
     class B(A):
-        @registToMethod(override)
+        @regist(override)
         def method1(): #OK
             ...
 
-        @registToMethod(override)
+        @regist(override)
         def method2(): #OverrideException
             ...
 
