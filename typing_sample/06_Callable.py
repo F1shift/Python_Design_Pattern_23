@@ -29,8 +29,8 @@ h = func1  #メソッドの形式チェック：OK
 h = func2  #メソッドの形式チェック：警告。引数のタイプが違う。サブクラスは含まない。
 h = func3  #メソッドの形式チェック：警告。リターンのタイプが違う。
 h = func4  #メソッドの形式チェック：警告。引数のタイプが違う。
-h = func5  #メソッドの形式チェック：警告、引数数が違う。
-# Pycharmでは引数欠けている場合はOKとされてしまう。
+h = func5  #メソッドの形式チェック：警告、引数数が違う。# Pycharmでは引数欠けている場合はOKとされてしまう。
+
 
 h2: Callable[[Any], float] # リターンの型だけ制限したいとき
 h2 = func1  #メソッドの形式チェック：OK
@@ -55,7 +55,8 @@ method_format = Callable[[int], None]
 
 def print_name_when_runned(method: method_format) -> method_format:
     def wrapper(x: int) -> None:
-        print(f"{method.__name__}が実行された！") #元のメソッドを実行した上て、何らかの手を加えるのがdecoratorの目的。
+        #元のメソッドを実行した上て、何らかの手を加えるのがdecoratorの目的。
+        print(f"{method.__name__}が実行された！") 
         method(x)
     return wrapper
 
@@ -67,4 +68,4 @@ def method1():
 def method2(x: int):
     pass
 
-method2(1)
+method2(1) #　Consoleに「method2が実行された！」と出力

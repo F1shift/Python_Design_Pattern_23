@@ -14,12 +14,12 @@ class SomeClass():
     def method1(self, x: float, y: int) -> None: #関数可能な呼び出し方を定義のみ、実装できない。
         ...
     
-    def method1(self, x, *y) -> None: #本番の実装。上記のoverloadで型チェックするため、こちらでは型定義は不要。
+    def method1(self, x: Union[int, str, float], *y: int) -> None: #本番の実装。上記のoverloadで型チェックする。
         if isinstance(x, int):
             print("int")
         elif isinstance(x, str):
             print("str")
-        elif isinstance(x, float) and len(y) > 0 and isinstance(y[0], int):
+        elif len(y) > 0: #ここでx,とyの型をチェックすると逆に余計なチェックと見なされ、警告が出されます。
             print("float, int")
         else:
             raise TypeError("処理できない型！")
