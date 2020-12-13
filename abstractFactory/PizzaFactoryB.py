@@ -4,7 +4,7 @@ from pathlib import Path
 sys.path.append(Path(__file__).parents[1].__str__())
 from abstractFactory.AbstractPizzaFactory import AbstractPizzaFactory
 from utils.abcd import override
-from utils.register import register
+from utils.register import registToMethod
 from abstractFactory.Material import RiceFlourDough, BasilSource, CheeseTopping
 
 
@@ -12,14 +12,14 @@ class PizzaFactoryB(AbstractPizzaFactory):
     def __init__(self):
         super().__init__(self)
 
-    @register(override)
+    @registToMethod(override)
     def add_dough(self, amount):
         return RiceFlourDough(amount)
 
-    @register(override)
+    @registToMethod(override)
     def add_source(self, amount):
         return BasilSource(amount)
 
-    @register(override)
+    @registToMethod(override)
     def add_topping(self, amount):
         return CheeseTopping(amount)

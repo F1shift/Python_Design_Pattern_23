@@ -3,7 +3,7 @@ from pathlib import Path
 # 親ディレクトリをsys.pathに追加。upto (int): 遡る階層。
 sys.path.append(Path(__file__).parents[1].__str__())
 from utils.abcd import override
-from utils.register import register
+from utils.register import registToMethod
 from abc import abstractmethod
 from utils.abcd import ABCD
 
@@ -28,7 +28,7 @@ class Dough(Material):
 
 class WheatDough(Dough):
     """小麦生地。"""
-    @register(override)
+    @registToMethod(override)
     def check(self):
         """素材内容を出力"""
         return f"WheatDough(amount = {self.amount})"
@@ -36,7 +36,7 @@ class WheatDough(Dough):
 
 class RiceFlourDough(Dough):
     """米粉生地。"""
-    @register(override)
+    @registToMethod(override)
     def check(self):
         """素材内容を出力"""
         return f"RiceFlourDough(amount = {self.amount})"
@@ -54,7 +54,7 @@ class Source(Material):
 
 class TomatoSource(Source):
     """トマトソース。"""
-    @register(override)
+    @registToMethod(override)
     def check(self):
         """素材内容を出力"""
         return f"TomatoSource(amount = {self.amount})"
@@ -62,7 +62,7 @@ class TomatoSource(Source):
 
 class BasilSource(Source):
     """バジルソース。"""
-    @register(override)
+    @registToMethod(override)
     def check(self):
         """素材内容を出力"""
         return f"BasilSource(amount = {self.amount})"
@@ -80,7 +80,7 @@ class Topping(Material):
 
 class CoanTopping(Topping):
     """コーントッピング"""
-    @register(override)
+    @registToMethod(override)
     def check(self):
         """素材内容を出力"""
         return f"CoanTopping(amount = {self.amount})"
@@ -88,7 +88,7 @@ class CoanTopping(Topping):
 
 class CheeseTopping(Topping):
     """チーズトッピング。"""
-    @register(override)
+    @registToMethod(override)
     def check(self):
         """素材内容を出力"""
         return f"CheeseTopping(amount = {self.amount})"

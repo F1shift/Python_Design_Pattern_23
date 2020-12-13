@@ -19,7 +19,7 @@ def override(method: AnyMethod) -> AnyMethod:
     """utils.registerと併用して、タグとして使います。
 
 from utils.override import override
-@register(override)
+@registToMethod(override)
 def method():
     ...
 """
@@ -35,7 +35,7 @@ class ABCDMeta(ABCMeta):
     def __check_override__(class_to_check: Type["ABCDMeta"]):
         """overrideするメソッドが存在しているかをチェックする。
 
-    from utils.register import register
+    from utils.register import registToMethod
     from utils.override import override, check_override
 
     class A
@@ -43,24 +43,35 @@ class ABCDMeta(ABCMeta):
             ...
 
     class B(A):
-        @register(override)
+        @registToMethod(override)
         def method1(): #OK
             ...
 
-        @register(override)
+        @registToMethod(override)
         def method2(): #OverrideException
             ...
 
     check_override(B)
     """
-        override_methods = inspect.getmembers(class_to_check, lambda f: check_has_decorator(f, override.__name__))
-        for method in override_methods:
+        override_targets = inspect.getmembers(class_to_check, lambda f: 
+            check_has_decorator(f, override.__name__))
+        for target in override_targets:
             exist = False
-            for base in class_to_check.__bases__:
-                if method[0] in dir(cast(type, base)):
-                    exist = True
-                    break
+            if isinstance(target[1], property):
+                for base in class_to_check.__bases__:
+                    baseClass_properties = inspect.getmembers(cast(type, base), lambda f: isinstance(f, property))
+                    if target[0] in map(lambda t: t[0], baseClass_properties):
+                        exist = True
+                        break
+            elif inspect.isfunction(target[1]):
+                for base in class_to_check.__bases__:
+                    baseClass_functions = inspect.getmembers(cast(type, base), inspect.isfunction)
+                    if target[0] in map(lambda t: t[0], baseClass_functions):
+                        exist = True
+                        break
+            else:
+                raise OverrideException(f"[{class_to_check.__name__}].{target[0]}はメソッドやプロパティーではありません！")
             if not exist:
-                raise OverrideException(f"class:[{class_to_check.__name__}]:オーバーライドできるメソッド：[{method[0]}]が見つかりませんでした！")
+                raise OverrideException(f"class:[{class_to_check.__name__}]:オーバーライドできるメソッドやプロパティー：[{target[0]}]が見つかりませんでした！")
 
 class ABCD(metaclass = ABCDMeta):...

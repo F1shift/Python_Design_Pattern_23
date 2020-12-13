@@ -6,22 +6,22 @@ from builder.Pizza import Pizza
 from builder.Material import *
 from builder.PizzaBuilder import PizzaBuilder
 from utils.abcd import override
-from utils.register import register
+from utils.register import registToMethod
 
 
 class PizzaABuilder(PizzaBuilder):
 
-    @register(override)
+    @registToMethod(override)
     def add_dough(self, amount: float):
         self.__pizza__.materials.append(WheatDough(amount))
         return self
 
-    @register(override)
+    @registToMethod(override)
     def add_source(self, amount: float):
         self.__pizza__.materials.append(TomatoSource(amount))
         return self
 
-    @register(override)
+    @registToMethod(override)
     def add_topping(self, amount: float):
         self.__pizza__.materials.append(CoanTopping(amount))
         return self
