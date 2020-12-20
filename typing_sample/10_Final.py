@@ -9,6 +9,7 @@ class final_test_class():
     
     @final
     def method1(self) -> None:
+        self.Y_final = 2
         ...
 
 class fsub_inal_test_class(final_test_class):
