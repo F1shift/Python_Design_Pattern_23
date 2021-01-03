@@ -1,4 +1,4 @@
-#平均値を計算するメソッドを文字列も計算できるようにする。
+#平均値メソッドを実行するの前に、入力値を各タイプから数値に変換するデコレータを付ける。
 from typing import Iterator, Union, Callable, Tuple
 
 target_func = Callable[..., float]
