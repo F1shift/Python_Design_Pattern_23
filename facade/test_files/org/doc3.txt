@@ -1,4 +1,4 @@
-from typing import Iterator, Optional, Callable, Any, List
+from typing import IO, Iterator, Optional, Callable, Any
 from os import path
 from zipfile import ZipFile
 import tarfile
@@ -7,10 +7,10 @@ import gzip
 class Archive:
     def __init__(self, filename: str) -> None:
         super().__init__()
+        self.filename = filename
         self._file : Any = None
         self._unpack : Optional[Callable[..., Any]] = None
-        self._getnames : Optional[Callable[...,List[str]]] = None
-        self.filename = filename
+        self._getnames : Optional[Callable[...,Iterator[str]]] = None
         
     @property
     def filename(self) -> str:
@@ -27,7 +27,7 @@ class Archive:
             self.__init__("")
     
     @property
-    def names(self) -> List[str]:
+    def names(self) -> Iterator[str]:
         if self._file is None:
             self.__prepare__()
         if self._getnames is not None:
@@ -46,7 +46,7 @@ class Archive:
     def __prepare__(self) -> None:
         if self.filename.endswith(".zip"):
             self.__prepare_zip__()
-        elif self.filename.endswith((".tar", ".tar.gz", ".tar.bz2", ".tar.xz")):
+        elif self.filename.endswith((".tar.gz", ".tar.bz2", ".tar.xz")):
             self.__prepare_tarball__()
         elif self.filename.endswith(".gz"):
             self.__prepare_gzip__()
@@ -56,26 +56,19 @@ class Archive:
     def __prepare_zip__(self):
         self._file = ZipFile(self.filename)
         self._getnames = self._file.namelist
-        def extractall():
-            self._file.extractall(path = path.dirname(self.filename))
-        self._unpack = extractall
+        self._unpack = self._file.extractall
     
     def __prepare_tarball__(self):
         suffix = path.splitext(self.filename)[1]
-        if suffix == ".tar":
-            self._file = tarfile.open(self.filename, "r:")
-        else:
-            self._file = tarfile.open(self.filename, "r:" + suffix[1:])
+        self._file = tarfile.open(self.filename, "r:" + suffix[1:])
         self._getnames = self._file.getnames
-        def extractall():
-            self._file.extractall(path = path.dirname(self.filename))
-        self._unpack = extractall
+        self._unpack = self._file.extractall
     
     def __prepare_gzip__(self):
         filename = path.splitext(self.filename)[0]
         self._file = gzip.open(self.filename)
-        def getnames() -> List[str]:
-            return ["gzip内容をプレビューできません。"]
+        def getnames() -> Iterator[str]:
+            raise NotImplementedError("gzip内容をプレビューできません。") 
         self._getnames = getnames
 
         def extractall():
