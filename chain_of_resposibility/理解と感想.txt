@@ -1,0 +1,21 @@
+「chain of responsibility」を直訳すると「責任の鎖」になりますが、
+意味としては、決めた順位でHandlerのチェインを作成し、
+処理依頼を回すとき、最初はチェインの一番目のHaldlerに渡す、
+各Handlerでは、渡された処理依頼は自分が処理するものなのかを判断し、
+当てはまる場合は処理を行い、そうでない場合なら次のHandlerに渡す。
+このチェイン構造を使って、処理依頼を順次に回していくのが「chain of responsibility」パターンです。
+GUIでイベント処理をするとき、このパターンを使用されていると思います。
+例えばGUIの階層が以下のような場合:
+    <dev>
+        <table>
+            <tr onclick="buttonClick_tr">
+                <td onclick="buttonClick_td">
+                    <img>
+                </td>
+            </tr>
+        </table>
+    </dev>
+imgをクリックすると、発生したclickイベントは、
+img -> td -> tr -> table -> devの順番で回されていきます、
+最初にclickイベントのHandlerを定義している要素(td)がイベントに対する処理を行います。
+つまり、この場合「責任の鎖」がimg -> td -> tr -> table -> devになります。
