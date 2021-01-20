@@ -1,0 +1,5 @@
+Command Patternとは、処理を一つ一つのCommandオブジェクトに分けて作成します。
+Commandは実行、または取り消して元の状態に戻す機能を持ち、再利用可能であります。
+またCompositeCommandはComposite PatternとCommand Patternの併用であり、
+一連のCommandを複合Commandにまとめて新しい機能を作り出し、
+作り出した複合Command普通のCommandと同じように実行、またはキャンセルすることができます。
