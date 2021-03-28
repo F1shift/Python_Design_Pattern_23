@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 from typing import Iterable
 # 上層ディレクトリをライブラリ検索パスに追加する。upto (str) : 遡る階層。
-sys.path.append(Path(__file__).parents[1].__str__())
+sys.path.append(Path(__file__).resolve().parents[1].__str__())
 from utils.abcd import override
 from utils.register import regist
 from bridge.sorter import Sorter

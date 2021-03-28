@@ -11,6 +11,14 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Python: main File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}/../main.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}"
         }
     ]
 }
